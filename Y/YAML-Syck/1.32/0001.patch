@@ -1,0 +1,127 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Nicolas R <nicolas@atoomic.org>
+Date: Tue, 25 Aug 2020 15:26:03 -0600
+Subject: [PATCH] add use v5
+
+---
+ inc/ExtUtils/HasCompiler.pm | 10 +++++-----
+ lib/JSON/Syck.pm            |  2 +-
+ lib/YAML/Dumper/Syck.pm     |  2 +-
+ lib/YAML/Loader/Syck.pm     |  2 +-
+ lib/YAML/Syck.pm            |  4 ++--
+ syck_st.c                   |  2 +-
+ syck_st.h                   |  2 +-
+ t/TestYAML.pm               |  2 +-
+ 8 files changed, 13 insertions(+), 13 deletions(-)
+
+diff --git a/inc/ExtUtils/HasCompiler.pm b/inc/ExtUtils/HasCompiler.pm
+index 7c54238..62777ea 100644
+--- a/inc/ExtUtils/HasCompiler.pm
++++ b/inc/ExtUtils/HasCompiler.pm
+@@ -1,4 +1,4 @@
+-package ExtUtils::HasCompiler;
++use v5; package ExtUtils::HasCompiler;
+ $ExtUtils::HasCompiler::VERSION = '0.021';
+ use strict;
+ use warnings;
+@@ -124,8 +124,8 @@ sub can_compile_loadable_object {
+ 	}
+ 
+ 	my $shortname = '_Loadable' . $counter++;
+-	my $package = "ExtUtils::HasCompiler::$shortname";
+-	printf $source_handle $loadable_object_format, $basename, $package or do { carp "Couldn't write to $source_name: $!"; return };
++	my $use v5; package = "ExtUtils::HasCompiler::$shortname";
++	printf $source_handle $loadable_object_format, $basename, $use v5; package or do { carp "Couldn't write to $source_name: $!"; return };
+ 	close $source_handle or do { carp "Couldn't close $source_name: $!"; return };
+ 
+ 	for my $command (@commands) {
+@@ -183,8 +183,8 @@ sub can_compile_static_library {
+ 	}
+ 
+ 	my $shortname = '_Loadable' . $counter++;
+-	my $package = "ExtUtils::HasCompiler::$shortname";
+-	printf $source_handle $loadable_object_format, $basename, $package or do { carp "Couldn't write to $source_name: $!"; return };
++	my $use v5; package = "ExtUtils::HasCompiler::$shortname";
++	printf $source_handle $loadable_object_format, $basename, $use v5; package or do { carp "Couldn't write to $source_name: $!"; return };
+ 	close $source_handle or do { carp "Couldn't close $source_name: $!"; return };
+ 
+ 	for my $command (@commands) {
+diff --git a/lib/JSON/Syck.pm b/lib/JSON/Syck.pm
+index eb77db5..c92abd6 100644
+--- a/lib/JSON/Syck.pm
++++ b/lib/JSON/Syck.pm
+@@ -1,4 +1,4 @@
+-package JSON::Syck;
++use v5; package JSON::Syck;
+ use strict;
+ 
+ use Exporter;
+diff --git a/lib/YAML/Dumper/Syck.pm b/lib/YAML/Dumper/Syck.pm
+index 10ecec8..d38785b 100644
+--- a/lib/YAML/Dumper/Syck.pm
++++ b/lib/YAML/Dumper/Syck.pm
+@@ -1,4 +1,4 @@
+-package YAML::Dumper::Syck;
++use v5; package YAML::Dumper::Syck;
+ use strict;
+ 
+ sub new { $_[0] }
+diff --git a/lib/YAML/Loader/Syck.pm b/lib/YAML/Loader/Syck.pm
+index 63f55a4..f918e03 100644
+--- a/lib/YAML/Loader/Syck.pm
++++ b/lib/YAML/Loader/Syck.pm
+@@ -1,4 +1,4 @@
+-package YAML::Loader::Syck;
++use v5; package YAML::Loader::Syck;
+ use strict;
+ 
+ sub new { $_[0] }
+diff --git a/lib/YAML/Syck.pm b/lib/YAML/Syck.pm
+index af4eb44..aada3b8 100644
+--- a/lib/YAML/Syck.pm
++++ b/lib/YAML/Syck.pm
+@@ -1,4 +1,4 @@
+-package YAML::Syck;
++use v5; package YAML::Syck;
+ 
+ # See documentation after the __END__ mark.
+ 
+@@ -260,7 +260,7 @@ please use the C<YAML::XS> module instead.
+ The current implementation bundles libsyck source code; if your system has a
+ site-wide shared libsyck, it will I<not> be used.
+ 
+-Tag names such as C<!!perl/hash:Foo> is blessed into the package C<Foo>, but
++Tag names such as C<!!perl/hash:Foo> is blessed into the use v5; package C<Foo>, but
+ the C<!hs/foo> and C<!!hs/Foo> tags are blessed into C<hs::Foo>.  Note that
+ this holds true even if the tag contains non-word characters; for example,
+ C<!haskell.org/Foo> is blessed into C<haskell.org::Foo>.  Please use
+diff --git a/syck_st.c b/syck_st.c
+index 8c4631b..8cbef72 100644
+--- a/syck_st.c
++++ b/syck_st.c
+@@ -1,4 +1,4 @@
+-/* This is a public domain general purpose hash table package written by Peter Moore @ UCB. */
++/* This is a public domain general purpose hash table use v5; package written by Peter Moore @ UCB. */
+ 
+ /* static	char	sccsid[] = "@(#) st.c 5.1 89/12/14 Crucible"; */
+ 
+diff --git a/syck_st.h b/syck_st.h
+index 6397f87..6914bbc 100644
+--- a/syck_st.h
++++ b/syck_st.h
+@@ -1,4 +1,4 @@
+-/* This is a public domain general purpose hash table package written by Peter Moore @ UCB. */
++/* This is a public domain general purpose hash table use v5; package written by Peter Moore @ UCB. */
+ 
+ /* @(#) st.h 5.1 89/12/14 */
+ 
+diff --git a/t/TestYAML.pm b/t/TestYAML.pm
+index 401cfcc..572bf4a 100644
+--- a/t/TestYAML.pm
++++ b/t/TestYAML.pm
+@@ -1,4 +1,4 @@
+-package TestYAML;
++use v5; package TestYAML;
+ 
+ BEGIN { $ENV{PERL_DL_NONLAZY} = 0 }
+ 
