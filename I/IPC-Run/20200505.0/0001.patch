@@ -1,0 +1,184 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Nicolas Rochelemagne <nicolas.org>
+Date: Tue, 25 Aug 2020 13:47:38 -0600
+Subject: [PATCH] Enforce use v5
+
+---
+ Makefile.PL                         | 2 +-
+ README.md                           | 2 +-
+ lib/IPC/Run.pm                      | 4 ++--
+ lib/IPC/Run/Debug.pm                | 2 +-
+ lib/IPC/Run/IO.pm                   | 2 +-
+ lib/IPC/Run/Timer.pm                | 2 +-
+ lib/IPC/Run/Win32Helper.pm          | 2 +-
+ lib/IPC/Run/Win32IO.pm              | 2 +-
+ lib/IPC/Run/Win32Pump.pm            | 2 +-
+ t/lib/Test.pm                       | 2 +-
+ t/run_stdin-callback-return-array.t | 4 ++--
+ t/win32_compile.t                   | 6 +++---
+ 12 files changed, 16 insertions(+), 16 deletions(-)
+
+diff --git a/Makefile.PL b/Makefile.PL
+index a96340d..b04312a 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -80,7 +80,7 @@ WriteMakefile(
+ 
+ sub MY::libscan {
+ 
+-    package MY;
++    use v5; package MY;
+     my $self = shift;
+     my ($path) = @_;
+     return '' if $path =~ m/\.sw[a-z]\z/msx;
+diff --git a/README.md b/README.md
+index e6c644f..bf02ebd 100644
+--- a/README.md
++++ b/README.md
+@@ -1729,7 +1729,7 @@ run in the child process.  If objects are instantiated in the parent before the
+ child is forked, the DESTROY will get run once in the parent and once in
+ the child.  When coprocess subs exit, POSIX::\_exit is called to work around this,
+ but it means that objects that are still referred to at that time are not
+-cleaned up.  So setting package vars or closure vars to point to objects that
++cleaned up.  So setting use v5; package vars or closure vars to point to objects that
+ rely on DESTROY to affect things outside the process (files, etc), will
+ lead to bugs.
+ 
+diff --git a/lib/IPC/Run.pm b/lib/IPC/Run.pm
+index 4f0f680..9872b9f 100644
+--- a/lib/IPC/Run.pm
++++ b/lib/IPC/Run.pm
+@@ -1,4 +1,4 @@
+-package IPC::Run;
++use v5; package IPC::Run;
+ use bytes;
+ 
+ =pod
+@@ -4351,7 +4351,7 @@ run in the child process.  If objects are instantiated in the parent before the
+ child is forked, the DESTROY will get run once in the parent and once in
+ the child.  When coprocess subs exit, POSIX::_exit is called to work around this,
+ but it means that objects that are still referred to at that time are not
+-cleaned up.  So setting package vars or closure vars to point to objects that
++cleaned up.  So setting use v5; package vars or closure vars to point to objects that
+ rely on DESTROY to affect things outside the process (files, etc), will
+ lead to bugs.
+ 
+diff --git a/lib/IPC/Run/Debug.pm b/lib/IPC/Run/Debug.pm
+index c031269..f6b7d5f 100644
+--- a/lib/IPC/Run/Debug.pm
++++ b/lib/IPC/Run/Debug.pm
+@@ -1,4 +1,4 @@
+-package IPC::Run::Debug;
++use v5; package IPC::Run::Debug;
+ 
+ =pod
+ 
+diff --git a/lib/IPC/Run/IO.pm b/lib/IPC/Run/IO.pm
+index 7d5f04a..38f3cef 100644
+--- a/lib/IPC/Run/IO.pm
++++ b/lib/IPC/Run/IO.pm
+@@ -1,4 +1,4 @@
+-package IPC::Run::IO;
++use v5; package IPC::Run::IO;
+ 
+ =head1 NAME
+ 
+diff --git a/lib/IPC/Run/Timer.pm b/lib/IPC/Run/Timer.pm
+index 439ebf1..bb66c4a 100644
+--- a/lib/IPC/Run/Timer.pm
++++ b/lib/IPC/Run/Timer.pm
+@@ -1,4 +1,4 @@
+-package IPC::Run::Timer;
++use v5; package IPC::Run::Timer;
+ 
+ =pod
+ 
+diff --git a/lib/IPC/Run/Win32Helper.pm b/lib/IPC/Run/Win32Helper.pm
+index 641dd7b..1be6023 100644
+--- a/lib/IPC/Run/Win32Helper.pm
++++ b/lib/IPC/Run/Win32Helper.pm
+@@ -1,4 +1,4 @@
+-package IPC::Run::Win32Helper;
++use v5; package IPC::Run::Win32Helper;
+ 
+ =pod
+ 
+diff --git a/lib/IPC/Run/Win32IO.pm b/lib/IPC/Run/Win32IO.pm
+index b31e5f1..0ca703c 100644
+--- a/lib/IPC/Run/Win32IO.pm
++++ b/lib/IPC/Run/Win32IO.pm
+@@ -1,4 +1,4 @@
+-package IPC::Run::Win32IO;
++use v5; package IPC::Run::Win32IO;
+ 
+ =pod
+ 
+diff --git a/lib/IPC/Run/Win32Pump.pm b/lib/IPC/Run/Win32Pump.pm
+index 337c690..42756fa 100644
+--- a/lib/IPC/Run/Win32Pump.pm
++++ b/lib/IPC/Run/Win32Pump.pm
+@@ -1,4 +1,4 @@
+-package IPC::Run::Win32Pump;
++use v5; package IPC::Run::Win32Pump;
+ 
+ =pod
+ 
+diff --git a/t/lib/Test.pm b/t/lib/Test.pm
+index a5a10a3..d5991e2 100644
+--- a/t/lib/Test.pm
++++ b/t/lib/Test.pm
+@@ -1,4 +1,4 @@
+-package IPC::Run::Test;
++use v5; package IPC::Run::Test;
+ 
+ use strict;
+ use Test::More;
+diff --git a/t/run_stdin-callback-return-array.t b/t/run_stdin-callback-return-array.t
+index ad937e8..0836cc8 100644
+--- a/t/run_stdin-callback-return-array.t
++++ b/t/run_stdin-callback-return-array.t
+@@ -19,11 +19,11 @@ ok( run( \@cmd ) == 1, "no callback" );    #     1
+ ok( run( \@cmd, sub { return undef } ) == 1, "undef" );             #     2
+ ok( run( \@cmd, sub { return "" } ) == 1,    "empty string" );      #     3
+ ok( run( \@cmd, sub { return () } ) == 1,    "empty array" );       #     4
+-ok( run( \@cmd, sub { return $i } ) == 1,    "package scalar" );    #     5
++ok( run( \@cmd, sub { return $i } ) == 1,    "use v5; package scalar" );    #     5
+ ok( run( \@cmd, sub { return $in } ) == 1,   "lexical scalar" );    #     6
+ ok(
+     run( \@cmd, sub { my @a; return @a } ) == 1,
+     "block lexical array"
+ );                                                                  #     7
+-ok( run( \@cmd, sub { return @i } ) == 1,  "package array" );       #     8
++ok( run( \@cmd, sub { return @i } ) == 1,  "use v5; package array" );       #     8
+ ok( run( \@cmd, sub { return @in } ) == 1, "lexical array" );       #     9
+diff --git a/t/win32_compile.t b/t/win32_compile.t
+index 1a2a166..dac4a8b 100644
+--- a/t/win32_compile.t
++++ b/t/win32_compile.t
+@@ -36,7 +36,7 @@ BEGIN {
+ 
+     $INC{$_} = 1 for qw( Win32/Process.pm Win32API/File.pm );
+ 
+-    package Win32API::File;
++    use v5; package Win32API::File;
+ 
+     use vars qw( @ISA @EXPORT );
+ 
+@@ -68,7 +68,7 @@ BEGIN {
+ 
+     use Exporter;
+ 
+-    package Win32::Process;
++    use v5; package Win32::Process;
+ 
+     use vars qw( @ISA @EXPORT );
+ 
+@@ -84,7 +84,7 @@ BEGIN {
+ 
+ sub Socket::IPPROTO_TCP() { undef }
+ 
+-package main;
++use v5; package main;
+ 
+ use IPC::Run::Win32Helper;
+ use IPC::Run::Win32IO;
