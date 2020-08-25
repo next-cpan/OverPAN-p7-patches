@@ -1,0 +1,11 @@
+{
+   "distro_url" : "https://cpan.metacpan.org/authors/id/A/AT/ATOOMIC/Simple-Accessor-1.13.tar.gz",
+   "overpan_version" : "0.0001",
+   "updated_at" : "2020-08-25 17:59:31",
+   "distro_name" : "Simple-Accessor",
+   "patches" : [
+      "0001.patch",
+      "0002.patch"
+   ],
+   "distro_version" : "1.13"
+}
