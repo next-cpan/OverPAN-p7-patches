@@ -1,0 +1,325 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Nicolas Rochelemagne <nicolas.org>
+Date: Tue, 25 Aug 2020 13:49:54 -0600
+Subject: [PATCH] enforce use v5
+
+---
+ lib/Exporter.pm       | 30 +++++++++++++++---------------
+ lib/Exporter/Heavy.pm |  6 +++---
+ t/Exporter.t          | 36 ++++++++++++++++++------------------
+ t/warn.t              |  4 ++--
+ 4 files changed, 38 insertions(+), 38 deletions(-)
+
+diff --git a/lib/Exporter.pm b/lib/Exporter.pm
+index 19d7645..9c06587 100644
+--- a/lib/Exporter.pm
++++ b/lib/Exporter.pm
+@@ -1,4 +1,4 @@
+-package Exporter;
++use v5; package Exporter;
+ 
+ require 5.006;
+ 
+@@ -37,7 +37,7 @@ sub import {
+   # We *need* to treat @{"$pkg\::EXPORT_FAIL"} since Carp uses it :-(
+   my $exports = \@{"$pkg\::EXPORT"};
+   # But, avoid creating things if they don't exist, which saves a couple of
+-  # hundred bytes per package processed.
++  # hundred bytes per use v5; package processed.
+   my $fail = ${$pkg . '::'}{EXPORT_FAIL} && \@{"$pkg\::EXPORT_FAIL"};
+   return export $pkg, $callpkg, @_
+     if $Verbose or $Debug or $fail && @$fail > 1;
+@@ -104,14 +104,14 @@ Exporter - Implements default import method for modules
+ 
+ In module F<YourModule.pm>:
+ 
+-  package YourModule;
++  use v5; package YourModule;
+   require Exporter;
+   our @ISA = qw(Exporter);
+   our @EXPORT_OK = qw(munge frobnicate);  # symbols to export on request
+ 
+ or
+ 
+-  package YourModule;
++  use v5; package YourModule;
+   use Exporter 'import'; # gives you Exporter's import() method directly
+   our @EXPORT_OK = qw(munge frobnicate);  # symbols to export on request
+ 
+@@ -277,7 +277,7 @@ currently unused.
+ For example, suppose that you have a module, A, which already has an
+ import function:
+ 
+-    package A;
++    use v5; package A;
+ 
+     our @ISA = qw(Exporter);
+     our @EXPORT_OK = qw($b);
+@@ -288,11 +288,11 @@ import function:
+     }
+ 
+ and you want to Export symbol C<$A::b> back to the module that called 
+-package A.  Since Exporter relies on the import method to work, via 
++use v5; package A.  Since Exporter relies on the import method to work, via 
+ inheritance, as it stands Exporter::import() will never get called. 
+ Instead, say the following:
+ 
+-    package A;
++    use v5; package A;
+     our @ISA = qw(Exporter);
+     our @EXPORT_OK = qw($b);
+ 
+@@ -302,11 +302,11 @@ Instead, say the following:
+ 	A->export_to_level(1, @_);
+     }
+ 
+-This will export the symbols one level 'above' the current package - ie: to 
+-the program or module that used package A. 
++This will export the symbols one level 'above' the current use v5; package - ie: to 
++the program or module that used use v5; package A. 
+ 
+ Note: Be careful not to modify C<@_> at all before you call export_to_level
+-- or people using your package will get very unexplained results!
++- or people using your use v5; package will get very unexplained results!
+ 
+ =head2 Exporting Without Inheriting from Exporter
+ 
+@@ -314,7 +314,7 @@ By including Exporter in your C<@ISA> you inherit an Exporter's import() method
+ but you also inherit several other helper methods which you probably don't
+ want.  To avoid this you can do:
+ 
+-  package YourModule;
++  use v5; package YourModule;
+   use Exporter qw(import);
+ 
+ which will export Exporter's own import() method into YourModule.
+@@ -434,7 +434,7 @@ subroutine with the constant value.
+ 
+ A workaround for this is to call the constants once in a C<BEGIN> block:
+ 
+-   package My ;
++   use v5; package My ;
+ 
+    use Socket ;
+ 
+@@ -445,9 +445,9 @@ A workaround for this is to call the constants once in a C<BEGIN> block:
+ This forces the C<AUTOLOAD> for C<SO_LINGER> to take place before
+ SO_LINGER is encountered later in C<My> package.
+ 
+-If you are writing a package that C<AUTOLOAD>s, consider forcing
++If you are writing a use v5; package that C<AUTOLOAD>s, consider forcing
+ an C<AUTOLOAD> for any constants explicitly imported by other packages
+-or which are usually used when your package is C<use>d.
++or which are usually used when your use v5; package is C<use>d.
+ 
+ =head1 Good Practices
+ 
+@@ -480,7 +480,7 @@ The ideal (but a bit ugly) way to never have to think
+ about that is to use C<BEGIN> blocks.  So the first part
+ of the L</SYNOPSIS> code could be rewritten as:
+ 
+-  package YourModule;
++  use v5; package YourModule;
+ 
+   use strict;
+   use warnings;
+diff --git a/lib/Exporter/Heavy.pm b/lib/Exporter/Heavy.pm
+index 004815e..907f241 100644
+--- a/lib/Exporter/Heavy.pm
++++ b/lib/Exporter/Heavy.pm
+@@ -1,4 +1,4 @@
+-package Exporter::Heavy;
++use v5; package Exporter::Heavy;
+ 
+ use strict;
+ no strict 'refs';
+@@ -48,7 +48,7 @@ sub heavy_export {
+ 	my $text = shift;
+ 	if ($text =~ s/ at \S*Exporter\S*.pm line \d+.*\n//) {
+ 	    require Carp;
+-	    local $Carp::CarpLevel = 1;	# ignore package calling us too.
++	    local $Carp::CarpLevel = 1;	# ignore use v5; package calling us too.
+ 	    Carp::carp($text);
+ 	}
+ 	else {
+@@ -57,7 +57,7 @@ sub heavy_export {
+     };
+     local $SIG{__DIE__} = sub {
+ 	require Carp;
+-	local $Carp::CarpLevel = 1;	# ignore package calling us too.
++	local $Carp::CarpLevel = 1;	# ignore use v5; package calling us too.
+ 	Carp::croak("$_[0]Illegal null symbol in \@${1}::EXPORT")
+ 	    if $_[0] =~ /^Unable to create sub named "(.*?)::"/;
+     };
+diff --git a/t/Exporter.t b/t/Exporter.t
+index 0518080..6eaf670 100644
+--- a/t/Exporter.t
++++ b/t/Exporter.t
+@@ -34,7 +34,7 @@ BEGIN {
+ }
+ 
+ 
+-package Testing;
++use v5; package Testing;
+ require Exporter;
+ @ISA = qw(Exporter);
+ 
+@@ -84,7 +84,7 @@ foreach my $tag (keys %tags) {
+ ::ok( $ok, 'export_ok_tags()' );
+ 
+ 
+-package Foo;
++use v5; package Foo;
+ Testing->import;
+ 
+ ::ok( defined &lifejacket,      'simple import' );
+@@ -108,7 +108,7 @@ $got = eval "&is";
+   (defined $got ? "'$got'" : "undef") . "\n";
+ 
+ 
+-package Bar;
++use v5; package Bar;
+ my @imports = qw($seatbelt &Above stuff @wailing %left);
+ Testing->import(@imports);
+ 
+@@ -118,7 +118,7 @@ Testing->import(@imports);
+     'import by symbols' );
+ 
+ 
+-package Yar;
++use v5; package Yar;
+ my @tags = qw(:This :tray);
+ Testing->import(@tags);
+ 
+@@ -129,7 +129,7 @@ Testing->import(@tags);
+     'import by tags' );
+ 
+ 
+-package Err;
++use v5; package Err;
+ my @missing = qw(first second);
+ eval { Testing->import(@missing) };
+ 
+@@ -139,13 +139,13 @@ for my $func (@missing) {
+ }
+ 
+ 
+-package Arrr;
++use v5; package Arrr;
+ Testing->import(qw(!lifejacket));
+ 
+ ::ok( !defined &lifejacket,     'deny import by !' );
+ 
+ 
+-package Mars;
++use v5; package Mars;
+ Testing->import('/e/');
+ 
+ ::ok( (! grep { my ($s, $n) = @$_; eval "\\$s$n != \\${s}Testing::$n" }
+@@ -155,7 +155,7 @@ Testing->import('/e/');
+     'import by regex');
+ 
+ 
+-package Venus;
++use v5; package Venus;
+ Testing->import('!/e/');
+ 
+ ::ok( (! grep { my ($s, $n) = @$_; eval "\\$s$n == \\${s}Testing::$n" }
+@@ -167,14 +167,14 @@ Testing->import('!/e/');
+ ::ok( !defined &lifejacket, 'further denial' );
+ 
+ 
+-package More::Testing;
++use v5; package More::Testing;
+ @ISA = qw(Exporter);
+ $VERSION = 0;
+ eval { More::Testing->require_version(0); 1 };
+ ::ok(!$@,       'require_version(0) and $VERSION = 0');
+ 
+ 
+-package Yet::More::Testing;
++use v5; package Yet::More::Testing;
+ @ISA = qw(Exporter);
+ $VERSION = 0;
+ eval { Yet::More::Testing->require_version(10); 1 };
+@@ -184,25 +184,25 @@ eval { Yet::More::Testing->require_version(10); 1 };
+ my $warnings;
+ BEGIN {
+     local $SIG{__WARN__} = sub { $warnings = join '', @_ };
+-    package Testing::Unused::Vars;
++    use v5; package Testing::Unused::Vars;
+     @ISA = qw(Exporter);
+     @EXPORT = qw(this $TODO that);
+ 
+-    package Foo;
++    use v5; package Foo;
+     Testing::Unused::Vars->import;
+ }
+ 
+ ::ok( !$warnings, 'Unused variables can be exported without warning' ) ||
+   print "# $warnings\n";
+ 
+-package Moving::Target;
++use v5; package Moving::Target;
+ @ISA = qw(Exporter);
+ @EXPORT_OK = qw (foo);
+ 
+ sub foo {"This is foo"};
+ sub bar {"This is bar"};
+ 
+-package Moving::Target::Test;
++use v5; package Moving::Target::Test;
+ 
+ Moving::Target->import ('foo');
+ 
+@@ -214,7 +214,7 @@ Moving::Target->import ('bar');
+ 
+ ::ok (bar() eq "This is bar", "imported bar after EXPORT_OK changed");
+ 
+-package The::Import;
++use v5; package The::Import;
+ 
+ use Exporter 'import';
+ 
+@@ -223,7 +223,7 @@ use Exporter 'import';
+ @EXPORT = qw( wibble );
+ sub wibble {return "wobble"};
+ 
+-package Use::The::Import;
++use v5; package Use::The::Import;
+ 
+ The::Import->import;
+ 
+@@ -236,12 +236,12 @@ eval { Carp::croak() };
+ ::ok($Carp::Internal{Exporter}, "Carp recognizes Exporter");
+ ::ok($Carp::Internal{'Exporter::Heavy'}, "Carp recognizes Exporter::Heavy");
+ 
+-package Exporter::for::Tied::_;
++use v5; package Exporter::for::Tied::_;
+ 
+ @ISA = 'Exporter';
+ @EXPORT = 'foo';
+ 
+-package Tied::_;
++use v5; package Tied::_;
+ 
+ sub TIESCALAR{bless[]}
+ # no tie methods!
+diff --git a/t/warn.t b/t/warn.t
+index 3010964..3df1040 100644
+--- a/t/warn.t
++++ b/t/warn.t
+@@ -23,11 +23,11 @@ BEGIN {
+     ok( 1, 'Exporter compiled' );
+ }
+ 
+-package Foo;
++use v5; package Foo;
+ Exporter->import("import");
+ @EXPORT_OK = "bar";
+ 
+-package main;
++use v5; package main;
+ 
+ { # [perl #39739] Exporter::Heavy ignores custom $SIG{__WARN__} handlers
+     my @warn;
