@@ -1,0 +1,10 @@
+{
+   "updated_at" : "2020-08-25 20:01:46",
+   "distro_version" : "0.14",
+   "overpan_version" : "0.0001",
+   "distro_name" : "Safe-Hole",
+   "patches" : [
+      "0001.patch"
+   ],
+   "distro_url" : "https://cpan.metacpan.org/authors/id/T/TO/TODDR/Safe-Hole-0.14.tar.gz"
+}
