@@ -1,10 +1,11 @@
 {
-   "distro_version" : "1.32",
-   "patches" : [
-      "0001.patch"
-   ],
+   "updated_at" : "2020-08-25 21:28:43",
    "overpan_version" : "0.0001",
-   "updated_at" : "2020-08-25 21:26:23",
-   "distro_url" : "https://cpan.metacpan.org/authors/id/T/TO/TODDR/YAML-Syck-1.32.tar.gz",
-   "distro_name" : "YAML-Syck"
+   "distro_name" : "YAML-Syck",
+   "patches" : [
+      "0001.patch",
+      "0002.patch"
+   ],
+   "distro_version" : "1.32",
+   "distro_url" : "https://cpan.metacpan.org/authors/id/T/TO/TODDR/YAML-Syck-1.32.tar.gz"
 }

@@ -1,0 +1,28 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Nicolas R <nicolas@atoomic.org>
+Date: Tue, 25 Aug 2020 15:28:29 -0600
+Subject: [PATCH] revert a single file
+
+---
+ lib/YAML/Syck.pm | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/lib/YAML/Syck.pm b/lib/YAML/Syck.pm
+index aada3b8..af4eb44 100644
+--- a/lib/YAML/Syck.pm
++++ b/lib/YAML/Syck.pm
+@@ -1,4 +1,4 @@
+-use v5; package YAML::Syck;
++package YAML::Syck;
+ 
+ # See documentation after the __END__ mark.
+ 
+@@ -260,7 +260,7 @@ please use the C<YAML::XS> module instead.
+ The current implementation bundles libsyck source code; if your system has a
+ site-wide shared libsyck, it will I<not> be used.
+ 
+-Tag names such as C<!!perl/hash:Foo> is blessed into the use v5; package C<Foo>, but
++Tag names such as C<!!perl/hash:Foo> is blessed into the package C<Foo>, but
+ the C<!hs/foo> and C<!!hs/Foo> tags are blessed into C<hs::Foo>.  Note that
+ this holds true even if the tag contains non-word characters; for example,
+ C<!haskell.org/Foo> is blessed into C<haskell.org::Foo>.  Please use
