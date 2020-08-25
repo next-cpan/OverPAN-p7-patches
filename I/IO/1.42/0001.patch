@@ -1,0 +1,286 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Nicolas R <nicolas@atoomic.org>
+Date: Tue, 25 Aug 2020 14:02:32 -0600
+Subject: [PATCH] enforce use v5
+
+---
+ IO.pm                 | 2 +-
+ lib/IO/Dir.pm         | 4 ++--
+ lib/IO/File.pm        | 2 +-
+ lib/IO/Handle.pm      | 2 +-
+ lib/IO/Pipe.pm        | 4 ++--
+ lib/IO/Poll.pm        | 2 +-
+ lib/IO/Seekable.pm    | 4 ++--
+ lib/IO/Select.pm      | 6 +++---
+ lib/IO/Socket.pm      | 6 +++---
+ lib/IO/Socket/INET.pm | 2 +-
+ lib/IO/Socket/UNIX.pm | 2 +-
+ t/IO.t                | 4 ++--
+ t/io_getline.t        | 2 +-
+ t/io_leak.t           | 2 +-
+ t/io_multihomed.t     | 4 ++--
+ 15 files changed, 24 insertions(+), 24 deletions(-)
+
+diff --git a/IO.pm b/IO.pm
+index cf0b3c3..554d98a 100644
+--- a/IO.pm
++++ b/IO.pm
+@@ -1,6 +1,6 @@
+ #
+ 
+-package IO;
++use v5; package IO;
+ 
+ use XSLoader ();
+ use Carp;
+diff --git a/lib/IO/Dir.pm b/lib/IO/Dir.pm
+index 3a14ca8..7ac9423 100644
+--- a/lib/IO/Dir.pm
++++ b/lib/IO/Dir.pm
+@@ -4,7 +4,7 @@
+ # This program is free software; you can redistribute it and/or
+ # modify it under the same terms as Perl itself.
+ 
+-package IO::Dir;
++use v5; package IO::Dir;
+ 
+ use 5.008_001;
+ 
+@@ -168,7 +168,7 @@ IO::Dir - supply object methods for directory handles
+ 
+ =head1 DESCRIPTION
+ 
+-The C<IO::Dir> package provides two interfaces to perl's directory reading
++The C<IO::Dir> use v5; package provides two interfaces to perl's directory reading
+ routines.
+ 
+ The first interface is an object approach. C<IO::Dir> provides an object
+diff --git a/lib/IO/File.pm b/lib/IO/File.pm
+index cf51d9b..49e7677 100644
+--- a/lib/IO/File.pm
++++ b/lib/IO/File.pm
+@@ -1,6 +1,6 @@
+ #
+ 
+-package IO::File;
++use v5; package IO::File;
+ 
+ =head1 NAME
+ 
+diff --git a/lib/IO/Handle.pm b/lib/IO/Handle.pm
+index 45b6d4f..dbc63e1 100644
+--- a/lib/IO/Handle.pm
++++ b/lib/IO/Handle.pm
+@@ -1,4 +1,4 @@
+-package IO::Handle;
++use v5; package IO::Handle;
+ 
+ =head1 NAME
+ 
+diff --git a/lib/IO/Pipe.pm b/lib/IO/Pipe.pm
+index c3ceb86..c3d7d47 100644
+--- a/lib/IO/Pipe.pm
++++ b/lib/IO/Pipe.pm
+@@ -4,7 +4,7 @@
+ # This program is free software; you can redistribute it and/or
+ # modify it under the same terms as Perl itself.
+ 
+-package IO::Pipe;
++use v5; package IO::Pipe;
+ 
+ use 5.008_001;
+ 
+@@ -137,7 +137,7 @@ sub writer {
+     $me;
+ }
+ 
+-package IO::Pipe::End;
++use v5; package IO::Pipe::End;
+ 
+ our(@ISA);
+ 
+diff --git a/lib/IO/Poll.pm b/lib/IO/Poll.pm
+index 3fe0179..f538d95 100644
+--- a/lib/IO/Poll.pm
++++ b/lib/IO/Poll.pm
+@@ -5,7 +5,7 @@
+ # This program is free software; you can redistribute it and/or
+ # modify it under the same terms as Perl itself.
+ 
+-package IO::Poll;
++use v5; package IO::Poll;
+ 
+ use strict;
+ use IO::Handle;
+diff --git a/lib/IO/Seekable.pm b/lib/IO/Seekable.pm
+index 2370dcb..30bf886 100644
+--- a/lib/IO/Seekable.pm
++++ b/lib/IO/Seekable.pm
+@@ -1,6 +1,6 @@
+ #
+ 
+-package IO::Seekable;
++use v5; package IO::Seekable;
+ 
+ =head1 NAME
+ 
+@@ -9,7 +9,7 @@ IO::Seekable - supply seek based methods for I/O objects
+ =head1 SYNOPSIS
+ 
+     use IO::Seekable;
+-    package IO::Something;
++    use v5; package IO::Something;
+     @ISA = qw(IO::Seekable);
+ 
+ =head1 DESCRIPTION
+diff --git a/lib/IO/Select.pm b/lib/IO/Select.pm
+index 980a7e9..47c375a 100644
+--- a/lib/IO/Select.pm
++++ b/lib/IO/Select.pm
+@@ -4,7 +4,7 @@
+ # This program is free software; you can redistribute it and/or
+ # modify it under the same terms as Perl itself.
+ 
+-package IO::Select;
++use v5; package IO::Select;
+ 
+ use     strict;
+ use warnings::register;
+@@ -268,7 +268,7 @@ IO::Select - OO interface to the select system call
+ 
+ =head1 DESCRIPTION
+ 
+-The C<IO::Select> package implements an object approach to the system C<select>
++The C<IO::Select> use v5; package implements an object approach to the system C<select>
+ function call. It allows the user to see what IO handles, see L<IO::Handle>,
+ are ready for reading, writing or have an exception pending.
+ 
+@@ -343,7 +343,7 @@ Return the bit string suitable as argument to the core select() call.
+ 
+ =item select ( READ, WRITE, EXCEPTION [, TIMEOUT ] )
+ 
+-C<select> is a static method, that is you call it with the package name
++C<select> is a static method, that is you call it with the use v5; package name
+ like C<new>. C<READ>, C<WRITE> and C<EXCEPTION> are either C<undef> or
+ C<IO::Select> objects. C<TIMEOUT> is optional and has the same effect as
+ for the core select call.
+diff --git a/lib/IO/Socket.pm b/lib/IO/Socket.pm
+index ec76339..916e7f9 100644
+--- a/lib/IO/Socket.pm
++++ b/lib/IO/Socket.pm
+@@ -5,7 +5,7 @@
+ # This program is free software; you can redistribute it and/or
+ # modify it under the same terms as Perl itself.
+ 
+-package IO::Socket;
++use v5; package IO::Socket;
+ 
+ use 5.008_001;
+ 
+@@ -523,7 +523,7 @@ constructor, but if any arguments are provided, then one of them must be
+ the L<IO::Socket/"Domain"> argument. The L<IO::Socket/"Domain"> argument can,
+ by default, be either C<AF_INET> or C<AF_UNIX>. Other domains can be used if a
+ proper subclass for the domain family is registered. All other arguments will
+-be passed to the C<configuration> method of the package for that domain.
++be passed to the C<configuration> method of the use v5; package for that domain.
+ 
+ =head1 METHODS
+ 
+@@ -537,7 +537,7 @@ following new ones.
+ 
+ The accept method will perform the system call C<accept> on the socket and
+ return a new object. The new object will be created in the same class as the
+-listen socket, unless a specific package name is specified. This object can be
++listen socket, unless a specific use v5; package name is specified. This object can be
+ used to communicate with the client that was trying to connect.
+ 
+ This differs slightly from the C<accept> function in L<perlfunc>.
+diff --git a/lib/IO/Socket/INET.pm b/lib/IO/Socket/INET.pm
+index 8688f37..b4d4aae 100644
+--- a/lib/IO/Socket/INET.pm
++++ b/lib/IO/Socket/INET.pm
+@@ -4,7 +4,7 @@
+ # This program is free software; you can redistribute it and/or
+ # modify it under the same terms as Perl itself.
+ 
+-package IO::Socket::INET;
++use v5; package IO::Socket::INET;
+ 
+ use strict;
+ use IO::Socket;
+diff --git a/lib/IO/Socket/UNIX.pm b/lib/IO/Socket/UNIX.pm
+index 04b36ea..6ed54b4 100644
+--- a/lib/IO/Socket/UNIX.pm
++++ b/lib/IO/Socket/UNIX.pm
+@@ -4,7 +4,7 @@
+ # This program is free software; you can redistribute it and/or
+ # modify it under the same terms as Perl itself.
+ 
+-package IO::Socket::UNIX;
++use v5; package IO::Socket::UNIX;
+ 
+ use strict;
+ use IO::Socket;
+diff --git a/t/IO.t b/t/IO.t
+index 247940f..bfa2444 100644
+--- a/t/IO.t
++++ b/t/IO.t
+@@ -95,8 +95,8 @@ if ( -d $fakedir or mkpath( $fakedir ))
+ {
+ 	if (open( OUT, '>', $fakemod ))
+ 	{
+-		(my $package = <<'		END_HERE') =~ tr/\t//d;
+-		package IO::fakemod;
++		(my $use v5; package = <<'		END_HERE') =~ tr/\t//d;
++		use v5; package IO::fakemod;
+ 
+ 		sub import { die "Do not import!\n" }
+ 
+diff --git a/t/io_getline.t b/t/io_getline.t
+index 22361e6..799e181 100644
+--- a/t/io_getline.t
++++ b/t/io_getline.t
+@@ -72,7 +72,7 @@ is($list, "\n", "Read second line");
+ like($context, qr/^This distribution/, "Read third line");
+ 
+ {
+-    package TiedHandle;
++    use v5; package TiedHandle;
+ 
+     sub TIEHANDLE {
+         return bless ["Tick", "tick", "tick"];
+diff --git a/t/io_leak.t b/t/io_leak.t
+index 08cbe2b..638341e 100644
+--- a/t/io_leak.t
++++ b/t/io_leak.t
+@@ -24,7 +24,7 @@ sub leak {
+ 
+ # [perl #129788] IO::Poll shouldn't leak on errors
+ {
+-    package io_poll_leak;
++    use v5; package io_poll_leak;
+     use IO::Poll;
+ 
+     sub TIESCALAR { bless {} }
+diff --git a/t/io_multihomed.t b/t/io_multihomed.t
+index f2a8e11..c646e41 100644
+--- a/t/io_multihomed.t
++++ b/t/io_multihomed.t
+@@ -27,7 +27,7 @@ $| = 1;
+ print "1..8\n";
+ watchdog(15);
+ 
+-package Multi;
++use v5; package Multi;
+ require IO::Socket::INET;
+ @ISA=qw(IO::Socket::INET);
+ 
+@@ -70,7 +70,7 @@ sub connect
+ 
+ 
+ 
+-package main;
++use v5; package main;
+ 
+ use IO::Socket;
+ 

@@ -1,0 +1,10 @@
+{
+   "overpan_version" : "0.0001",
+   "updated_at" : "2020-08-25 20:02:34",
+   "distro_version" : "1.42",
+   "distro_name" : "IO",
+   "distro_url" : "https://cpan.metacpan.org/authors/id/T/TO/TODDR/IO-1.42.tar.gz",
+   "patches" : [
+      "0001.patch"
+   ]
+}
