@@ -1,6 +1,6 @@
 # NAME
 
-OverPAN-p5-patches - CPAN community patches for OverPAN
+OverPAN-p7-patches - CPAN community patches for OverPAN
 
 # DESCRIPTION
 
@@ -33,9 +33,9 @@ In order to create/edit patches, you first need to install [OverPAN](https://git
 OverPAN provides one `overpan` command line tool which can be used to edit patches.
 
 ```sh
-# make sure you have a clone of existing OverPAN-p5-patches
-git clone https://github.com/next-cpan/OverPAN-p5-patches
-cd OverPAN-p5-patches
+# make sure you have a clone of existing OverPAN-p7-patches
+git clone https://github.com/next-cpan/OverPAN-p7-patches
+cd OverPAN-p7-patches
 
 # create a patch for a distribution
 overpan Simple::Accessor
@@ -84,8 +84,8 @@ You can also use a customize location for the patches to use using `--overpan-so
 
 Samples:
 ```sh
-cpanm --overpan-source=https://github.com/next-cpan/OverPAN-p5-patches Simple::Accessor
-cpanm --overpan-source=/usr/local/OverPAN-p5-patches Simple::Accessor
+cpanm --overpan-source=https://github.com/next-cpan/OverPAN-p7-patches Simple::Accessor
+cpanm --overpan-source=/usr/local/OverPAN-p7-patches Simple::Accessor
 ```
 
 # Permitted patches for 1.0
